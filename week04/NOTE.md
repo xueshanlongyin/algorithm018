@@ -714,4 +714,157 @@ int main()
 }
 
 
+/*
+*    Simple QUEUE NODE
+*/ 
+
+#include "stdafx.h"
+#include <stdlib.h>
+
+typedef struct _qnode
+{
+  int state;
+   struct _qnode *next;
+}QNODE;
+
+/*
+*    Simple QUEUE Structure
+*/ 
+typedef struct _queue
+{
+  QNODE * head, *tail;
+  int count;
+}QUEUE;
+
+/*
+*   Initialize the queue
+*/ 
+void queue_init (QUEUE * s);
+
+/*
+*  Find a State in the queue
+*/ 
+int queue_find (QUEUE * s, int state);
+
+/*
+*  Add Tail Item to queue (FiFo/LiLo)
+*/ 
+void queue_add (QUEUE * s, int state);
+
+
+/*
+*  Remove Head Item from queue
+*/ 
+int queue_remove (QUEUE * s);
+
+
+/*
+*   Return items in the queue
+*/ 
+int queue_count (QUEUE * s);
+
+/*
+*  Free the queue
+*/ 
+void queue_free (QUEUE * s);
+
+/* queue.c */
+
+/*
+*   Initialize the queue
+*/ 
+void queue_init (QUEUE * s) 
+{
+  s->head = s->tail = 0;
+  s->count= 0;
+}
+
+/*
+*  Find a State in the queue
+*/ 
+int queue_find (QUEUE * s, int state) 
+{
+  QNODE * q;
+  q = s->head;
+  while( q )
+  {
+      if( q->state == state ) return 1;
+      q = q->next;
+  }
+  return 0;
+}
+
+/*
+*  Add Tail Item to queue (FiFo/LiLo)
+*/ 
+void queue_add (QUEUE * s, int state) 
+{
+  QNODE * q;
+
+  if( queue_find( s, state ) ) return;  
+
+  if (!s->head)
+  {
+      q = s->tail = s->head = (QNODE *) malloc (sizeof (QNODE));
+
+      q->state = state;
+      q->next = 0;
+  }
+  else
+  {
+      q = (QNODE *) malloc (sizeof (QNODE));
+
+      q->state = state;
+      q->next = 0;
+      s->tail->next = q;
+      s->tail = q;
+  }
+  s->count++;
+}
+
+
+/*
+*  Remove Head Item from queue
+*/ 
+int queue_remove (QUEUE * s) 
+{
+  int state = 0;
+  QNODE * q;
+  if (s->head)
+  {
+      q       = s->head;
+      state   = q->state;
+      s->head = s->head->next;
+      s->count--;
+
+      if( !s->head )
+      {
+          s->tail = 0;
+          s->count = 0;
+      }
+      free(q);
+  }
+  return state;
+}
+
+
+/*
+*   Return items in the queue
+*/ 
+int queue_count (QUEUE * s) 
+{
+  return s->count;
+}
+
+
+/*
+*  Free the queue
+*/ 
+void queue_free (QUEUE * s) 
+{
+  while (queue_count (s))
+    {
+      queue_remove (s);
+    }
+}
 
