@@ -5,6 +5,16 @@ typedef struct _Node {
     int val;
 } Node; //拉链法+单链表
 
+typedef struct {
+    int amount;
+    int total;
+    Node* buckets;
+} Map; //每个数组元素是桶
+
+typedef struct {
+    Map m;
+} MyHashMap;
+
 int ListAdd(Node* n, int key, int val) {
     for (; n->next != NULL; n = n->next) { //如果存在,则更新val
         if (n->next->key == key) {
@@ -41,12 +51,6 @@ int ListFind(Node* n, int key, int* val) {
     }
     return 0;
 }
-
-typedef struct {
-    int amount;
-    int total;
-    Node* buckets;
-} Map; //每个数组元素是桶
 
 void MapRehash(Map* s, int total) { //当桶已占满时,再哈希减少碰撞
     Node* tmp = malloc(total * sizeof(Node));
@@ -109,10 +113,6 @@ void MapDestroy(Map* s) {
     free(s->buckets);
     free(s);
 }
-
-typedef struct {
-    Map m;
-} MyHashMap;
 
 MyHashMap* myHashMapCreate() {
     return (MyHashMap*)MapInit();

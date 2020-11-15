@@ -37,3 +37,8 @@ int divide_conquer(Problem *problem, int params) {
   return 0;
 }
 ```
+
+#学号:G20200343150116
+#姓名:泉吟
+#小组:2组
+#作业&总结链接:https://github.com/xueshanlongyin/algorithm018/tree/master/week03
